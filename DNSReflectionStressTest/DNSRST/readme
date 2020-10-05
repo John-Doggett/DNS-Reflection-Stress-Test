@@ -1,4 +1,4 @@
-Make sure to run as root.
+Make sure to run as root and have Nmap installed.
 Add a new  website or domain server address to DomainServers and Website file on a new line to add custom websites and domain servers. DomainServers and Websites must be in same directory as DNSReflector.jar.
 Run with java -jar DNSReflector.jar (arguments)
 View help command with java -jar DSNReflector.jar --help

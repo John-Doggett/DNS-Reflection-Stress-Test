@@ -56,7 +56,9 @@ public class DNSReflector {
 		int count = 1;
 		int rate = 1;
 		String request = "0001";
-
+		String sourcePort = "53";
+		boolean verbose = false;
+		int waitTime = 1000;
 		String sourceIP = Inet4Address.getLocalHost().getHostAddress();
 
 		if (sourceIP.contains("127")) {
@@ -73,24 +75,28 @@ public class DNSReflector {
 			}
 		}
 
-		if(System.getProperty("user.name").equals("root") == false) {
-			if(args.length >= 1) {
+		if (System.getProperty("user.name").equals("root") == false) {
+			if (args.length >= 1) {
 				args[0] = "--help";
-			}
-			else {
+			} else {
 				args = new String[1];
 				args[0] = "--help";
 			}
 		}
-				
-		String sourcePort = "53";
-		boolean verbose = false;
+
 		for (int a = 0; a < args.length; a++) {
 			switch (args[a]) {
 			case "--count":
 				if (a + 1 < args.length && args[a + 1].matches("^[0-9]*$") && (args[a + 1]).length() >= 1
 						&& Integer.parseInt(args[a + 1]) >= 0) {
 					count = Integer.parseInt(args[a + 1]);
+					a++;
+					break;
+				}
+			case "--wait":
+				if (a + 1 < args.length && args[a + 1].matches("^[0-9]*$") && (args[a + 1]).length() >= 1
+						&& Integer.parseInt(args[a + 1]) >= 0) {
+					waitTime = Integer.parseInt(args[a + 1]);
 					a++;
 					break;
 				}
@@ -103,7 +109,7 @@ public class DNSReflector {
 				}
 			case "--iterations":
 				if (a + 1 < args.length && args[a + 1].matches("^[0-9]*$") && (args[a + 1]).length() >= 1
-						&& Integer.parseInt(args[a + 1]) >= 0) {
+						&& Integer.parseInt(args[a + 1]) >= -1) {
 					numberOfIterations = Integer.parseInt(args[a + 1]);
 					a++;
 					break;
@@ -129,7 +135,6 @@ public class DNSReflector {
 			case "--verbose":
 				verbose = true;
 				break;
-
 			default:
 				System.out.println("---DNS Reflection Benchmark Stress Test---");
 				System.out.println("Use with permission of target and DNS servers!");
@@ -148,10 +153,11 @@ public class DNSReflector {
 				System.out.println("--source-port (udp port), will send dns reponse to desired port, default 53");
 				System.out.println(
 						"--verbose, will print arguments for every nping thread created. WARNING: CAUSES HEAVY USAGE IF CREATING LOTS OF THREADS!");
+				System.out.println(
+						"--wait (mileseconds), will pause making another iteration with length of given miliseconds, default 1000 (1 second)");
 				numberOfIterations = 0;
 				a = args.length;
 				break;
-
 			}
 
 		}
@@ -172,6 +178,7 @@ public class DNSReflector {
 					Runtime.getRuntime().exec(command);
 				}
 			}
+			Thread.sleep(waitTime);
 		}
 	}
 
