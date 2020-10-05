@@ -1,0 +1,6 @@
+Make sure to run as root.
+Add a new  website or domain server address to DomainServers and Website file on a new line to add custom websites and domain servers. DomainServers and Websites must be in same directory as DNSReflector.jar.
+Run with java -jar DNSReflector.jar (arguments)
+View help command with java -jar DSNReflector.jar --help
+You can view view more about DNS packets here: http://www.networksorcery.com/enp/protocol/dns.htm
+
